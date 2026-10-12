@@ -6,9 +6,12 @@
 
 **当前版本：0.13.0**
 
-<p>
-  <img src="docs/screenshot-panel.png" width="320" alt="侧边栏：岗位匹配度与生成" hspace="14">
-  <img src="docs/screenshot-records.png" width="540" alt="岗位记录页：投递漏斗与统计分析">
+<p align="center">
+  <img src="docs/screenshot-panel.png" width="300" alt="侧边栏：岗位匹配度与生成">
+</p>
+
+<p align="center">
+  <img src="docs/screenshot-records.png" width="720" alt="岗位记录页：投递漏斗与统计分析">
 </p>
 
 ## 功能

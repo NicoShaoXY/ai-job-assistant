@@ -19,11 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-本仓库 `ai-job-assistant/vendor/` 目录下的第三方库遵循各自的原许可证，
-不受上述 MIT 许可覆盖：
-
-- pdf.js — Apache License 2.0，见 ai-job-assistant/vendor/pdfjs/LICENSE
-- JSZip — MIT 或 GPLv3 双许可，见 ai-job-assistant/vendor/jszip/LICENSE.markdown

@@ -1,0 +1,43 @@
+{
+  "manifest_version": 3,
+  "name": "AI 求职助手",
+  "version": "0.13.0",
+  "description": "侧边栏常驻：在 BOSS 职位详情页一键读取 JD，算简历匹配度、生成打招呼语和 HR 追问应答，并可按六个维度检索公开网页做求职风险背调。",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "permissions": ["activeTab", "scripting", "storage", "clipboardWrite", "sidePanel"],
+  "host_permissions": [
+    "https://www.zhipin.com/job_detail/*",
+    "https://*.zhipin.com/job_detail/*",
+    "https://api.deepseek.com/*",
+    "https://api.bocha.cn/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "action": {
+    "default_title": "AI 求职助手（点击打开侧边栏）",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+J",
+        "mac": "Command+Shift+J"
+      },
+      "description": "打开 AI 求职助手侧边栏（若在职位详情页会自动读取 JD）"
+    }
+  }
+}

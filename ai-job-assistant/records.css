@@ -1,0 +1,489 @@
+/* ============================================================
+   AI 求职助手 · 岗位记录页样式
+   令牌全部继承自 sidepanel.css 的 :root（本页在其后加载）。
+   这里只写本页特有的东西，组件级样式（按钮 / 弹窗 / 表单）复用 sidepanel.css。
+
+   注意：records.html 复用了 sidepanel.css，所以要把 sidepanel 的
+   main / header 布局规则在这里显式复位，否则本页会被压成 520px 宽的单列。
+   ============================================================ */
+
+body.records-body {
+  background: var(--bg);
+}
+
+.page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 24px 24px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* 复位 sidepanel 的单列布局 */
+.records-body main {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: none;
+  min-height: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.records-body header.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 0 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.page-header .brand-logo {
+  height: 30px;
+  width: 30px;
+  border-radius: 9px;
+}
+
+.page-header .brand-name {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.page-header .primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  width: auto;
+  padding: 9px 18px;
+  font-size: 13px;
+}
+
+/* ── 空状态 ───────────────────────────────────────────── */
+
+.empty-state {
+  margin: 0;
+  padding: 56px 24px;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--ink-light);
+  background: var(--surface);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+}
+
+/* ── 卡片 ─────────────────────────────────────────────── */
+
+.panel-card,
+.funnel-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.2s var(--ease);
+}
+
+.card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.card-title::before {
+  content: "";
+  width: 3px;
+  height: 13px;
+  border-radius: 2px;
+  background: var(--primary);
+  flex-shrink: 0;
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.card-head .card-title {
+  margin-bottom: 0;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+/* ── 投递漏斗 ─────────────────────────────────────────── */
+
+.funnel {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.funnel-step {
+  position: relative;
+  padding: 16px 14px;
+  border-radius: var(--radius);
+  background: var(--primary-50);
+  border: 1px solid var(--primary-100);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: transform 0.18s var(--ease), box-shadow 0.18s var(--ease);
+}
+
+.funnel-step:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.funnel-step .num {
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--primary-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.funnel-step .label {
+  font-size: 12.5px;
+  color: var(--ink-mid);
+}
+
+.funnel-step .rate {
+  margin-top: 2px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--success);
+}
+
+.sample-note {
+  margin: 14px 0 0;
+  font-size: 11.5px;
+  line-height: 1.65;
+  color: var(--ink-light);
+}
+
+/* ── 统计条 ───────────────────────────────────────────── */
+
+.stat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: 96px 1fr 62px;
+  align-items: center;
+  gap: 12px;
+  font-size: 12.5px;
+}
+
+.stat-row .name {
+  color: var(--ink-mid);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stat-row .bar {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--surface-3);
+  overflow: hidden;
+}
+
+.stat-row .bar span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--primary-300), var(--primary));
+  transition: width 0.55s var(--ease);
+}
+
+.stat-row .val {
+  text-align: right;
+  color: var(--ink-light);
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-empty {
+  margin: 0;
+  padding: 18px 0;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--ink-light);
+}
+
+/* ── 关键词标签云 ─────────────────────────────────────── */
+
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--primary-50);
+  border: 1px solid var(--primary-100);
+  font-size: 12px;
+  color: var(--primary-strong);
+  transition: background 0.16s var(--ease), border-color 0.16s var(--ease), transform 0.16s var(--ease);
+}
+
+.tag:hover {
+  background: var(--primary-100);
+  border-color: var(--primary-200);
+  transform: translateY(-1px);
+}
+
+.tag b {
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--primary);
+  border-radius: 999px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── 筛选片 ───────────────────────────────────────────── */
+
+.filter-row {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.filter-chip {
+  padding: 6px 13px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--ink-mid);
+  cursor: pointer;
+  transition: background 0.16s var(--ease), border-color 0.16s var(--ease),
+    color 0.16s var(--ease), transform 0.08s var(--ease);
+}
+
+.filter-chip:hover {
+  border-color: var(--primary-300);
+  color: var(--primary-strong);
+  background: var(--primary-50);
+}
+
+.filter-chip:active {
+  transform: translateY(1px);
+}
+
+.filter-chip.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  box-shadow: 0 2px 8px -3px rgba(62, 124, 228, 0.5);
+}
+
+/* ── 岗位列表 ─────────────────────────────────────────── */
+
+.job-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.job-row {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+  transition: border-color 0.18s var(--ease), box-shadow 0.18s var(--ease);
+}
+
+.job-row:hover {
+  border-color: var(--primary-200);
+  box-shadow: var(--shadow-sm);
+}
+
+.job-main {
+  display: grid;
+  grid-template-columns: 1fr 108px 96px 72px;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  transition: background 0.16s var(--ease);
+}
+
+.job-main:hover {
+  background: var(--primary-50);
+}
+
+.job-name {
+  min-width: 0;
+}
+
+.job-name .t {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.job-name .t:hover {
+  color: var(--primary-strong);
+  text-decoration: underline;
+}
+
+.job-name .c {
+  margin-top: 3px;
+  font-size: 11.5px;
+  color: var(--ink-light);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.job-salary {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink-mid);
+  font-variant-numeric: tabular-nums;
+}
+
+.job-status {
+  justify-self: start;
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.job-status.viewed {
+  background: var(--surface-3);
+  color: var(--ink-mid);
+}
+
+.job-status.greeted {
+  background: var(--primary-100);
+  color: var(--primary-strong);
+}
+
+.job-status.replied {
+  background: var(--primary);
+  color: #fff;
+}
+
+.job-status.applied {
+  background: var(--success-bg);
+  color: var(--success);
+}
+
+.job-time {
+  text-align: right;
+  font-size: 11.5px;
+  color: var(--ink-light);
+  white-space: nowrap;
+}
+
+.job-detail {
+  padding: 14px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-2);
+  animation: rise 0.2s var(--ease);
+}
+
+.detail-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--primary-strong);
+  margin-bottom: 6px;
+}
+
+.detail-label:not(:first-child) {
+  margin-top: 16px;
+}
+
+.detail-text {
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: var(--ink-mid);
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.detail-actions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ── 窄屏 ─────────────────────────────────────────────── */
+
+@media (max-width: 720px) {
+  .page {
+    padding: 16px 14px 32px;
+  }
+
+  .grid-2,
+  .funnel {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .job-main {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "name status"
+      "salary time";
+    row-gap: 6px;
+  }
+
+  .job-name {
+    grid-area: name;
+  }
+
+  .job-salary {
+    grid-area: salary;
+  }
+
+  .job-status {
+    grid-area: status;
+    justify-self: end;
+  }
+
+  .job-time {
+    grid-area: time;
+  }
+}

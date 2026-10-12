@@ -1,0 +1,10 @@
+# 由 tools/生成预览.py 产出的静态预览页，不入库
+/预览*.html
+
+# macOS
+.DS_Store
+
+# 编辑器
+.vscode/
+.idea/
+*.swp

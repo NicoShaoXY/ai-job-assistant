@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>岗位记录 · AI 求职助手</title>
+    <link rel="stylesheet" href="sidepanel.css" />
+    <link rel="stylesheet" href="records.css" />
+  </head>
+  <body class="records-body">
+    <div class="page">
+      <header class="page-header">
+        <div class="brand">
+          <img class="brand-logo" src="icons/icon48.png" alt="" />
+          <span class="brand-name">岗位记录</span>
+        </div>
+        <div class="header-actions">
+          <button id="openAnalyze" class="primary with-ico" type="button"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 4.9L19 9.8l-5.1 1.9L12 16.6l-1.9-4.9L5 9.8l5.1-1.9L12 3z"/><path d="M18.5 15.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8.8-2z"/></svg><span>AI 分析</span></button>
+        </div>
+      </header>
+
+      <p id="emptyState" class="empty-state" hidden>
+        还没有记录。在 BOSS 职位详情页打开侧边栏读取一次 JD，这里就会出现第一条。
+      </p>
+
+      <main id="content" hidden>
+        <section class="funnel-card">
+          <div class="card-title">投递漏斗</div>
+          <div id="funnel" class="funnel"></div>
+          <p id="funnelNote" class="sample-note"></p>
+        </section>
+
+        <section class="grid-2">
+          <div class="panel-card">
+            <div class="card-title">薪资分布</div>
+            <div id="salaryStats" class="stat-list"></div>
+          </div>
+          <div class="panel-card">
+            <div class="card-title">硬性要求出现频次</div>
+            <div id="reqStats" class="stat-list"></div>
+          </div>
+        </section>
+
+        <section class="panel-card">
+          <div class="card-title">JD 里最常出现的技术关键词</div>
+          <div id="keywordStats" class="tag-cloud"></div>
+        </section>
+
+        <section class="panel-card">
+          <div class="card-head">
+            <div class="card-title">岗位列表</div>
+            <div id="filterRow" class="filter-row"></div>
+          </div>
+          <div id="jobList" class="job-list"></div>
+        </section>
+      </main>
+    </div>
+
+    <div id="analyzeModal" class="modal" hidden>
+      <div class="modal-backdrop" data-close="1"></div>
+      <div class="modal-card modal-card-wide" role="dialog" aria-modal="true" aria-labelledby="analyzeTitle">
+        <div class="modal-head">
+          <h2 id="analyzeTitle">AI 分析</h2>
+          <button id="analyzeClose" class="icon-button" type="button" title="关闭">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <p class="lead">这个插件不替你做分析。把下面两样东西一起发给任意一个 AI（DeepSeek、ChatGPT、Claude、豆包都行），它就能基于你自己的真实记录给出结论。</p>
+
+          <div class="step-block">
+            <div class="step-head"><span class="step-num">1</span><span class="step-title">下载你的岗位数据</span></div>
+            <p class="step-desc" id="csvDesc"></p>
+            <button id="exportCsv" class="secondary with-ico" type="button">
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><path d="M12 15V3"/></svg>
+              <span>导出表格（CSV）</span>
+            </button>
+          </div>
+
+          <div class="step-block">
+            <div class="step-head">
+              <span class="step-num">2</span><span class="step-title">复制这段提示词</span>
+              <button id="copyPrompt" class="pill-button accent" type="button">复制</button>
+            </div>
+            <p class="step-desc">已经带上你的数据规模和字段说明，直接粘贴即可。</p>
+            <div class="input-shell"><textarea id="analyzePrompt" class="prompt-textarea" readonly spellcheck="false"></textarea></div>
+          </div>
+
+          <div class="step-block">
+            <div class="step-head"><span class="step-num">3</span><span class="step-title">发给 AI</span></div>
+            <p class="step-desc">新开一个对话，先把 CSV 文件传上去，再粘贴这段提示词发送。文件传不了的话，用能读附件的模型，或者把 CSV 用记事本打开、把内容整段粘贴进去。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="records.js"></script>
+  </body>
+</html>

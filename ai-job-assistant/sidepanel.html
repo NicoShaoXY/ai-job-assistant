@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>AI 求职助手</title>
+    <link rel="stylesheet" href="sidepanel.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="brand">
+          <img class="brand-logo" src="icons/icon48.png" alt="" />
+          <span class="brand-name">AI 求职助手</span>
+        </div>
+        <div class="header-actions">
+          <button id="openRecords" class="icon-button" type="button" title="岗位记录"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg></button>
+          <button id="settingsToggle" class="icon-button" type="button" title="模型设置" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+        </div>
+      </header>
+
+      <div class="page-status-row">
+        <p id="pageStatus" class="page-status">正在检测当前页面…</p>
+        <button id="refreshJd" class="pill-button accent" type="button"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><polyline points="21 3 21 9 15 9"/></svg><span>重新读取</span></button>
+      </div>
+
+      <section id="jobInsight" class="job-insight" hidden>
+        <div class="insight-head">
+          <div id="matchGauge" class="match-gauge">
+            <span id="matchScore" class="match-score"></span>
+          </div>
+          <div class="insight-head-text">
+            <span class="record-title">岗位匹配度</span>
+            <span class="hint">规则层本地计算，不经过模型</span>
+          </div>
+        </div>
+        <div id="matchDims" class="match-dims"></div>
+        <p id="matchNote" class="hint"></p>
+        <details id="matchGaps" class="match-gaps" hidden>
+          <summary>差距项 <span id="gapCount">0</span></summary>
+          <div id="gapList" class="gap-list"></div>
+        </details>
+        <div class="insight-actions">
+          <button id="explainMatch" class="pill-button accent" type="button">AI 解读匹配度</button>
+          <button id="openBackcheck" class="pill-button warn-ghost" type="button">立即背调该公司</button>
+        </div>
+        <section id="matchExplainResult" class="result" hidden>
+          <label>匹配度解读</label>
+          <div id="matchExplainText" class="result-box"></div>
+        </section>
+      </section>
+
+      <nav class="tabs" role="tablist">
+        <button class="tab active" data-tab="greeting" role="tab" aria-selected="true" type="button">打招呼</button>
+        <button class="tab" data-tab="reply" role="tab" aria-selected="false" type="button">回 HR</button>
+      </nav>
+
+      <section id="panel-greeting" class="panel active" role="tabpanel">
+        <div class="field-label-row">
+          <label for="jdInput">岗位 JD</label>
+          <span id="jdCount" class="counter"></span>
+        </div>
+        <div class="input-shell">
+          <textarea id="jdInput" placeholder="粘贴岗位 JD，或点上方「重新读取」自动填入"></textarea>
+        </div>
+        <button id="generateGreeting" class="primary" type="button">生成打招呼语</button>
+      </section>
+
+      <section id="panel-reply" class="panel" role="tabpanel" hidden>
+        <div class="field-label-row">
+          <label for="hrInput">HR 发来的消息</label>
+          <span id="hrCount" class="counter"></span>
+        </div>
+        <div class="input-shell">
+          <textarea id="hrInput" placeholder="粘贴 HR 刚发的话，比如「方便说一下你的期望薪资吗」"></textarea>
+        </div>
+        <button id="generateReply" class="primary" type="button">生成回复</button>
+      </section>
+
+      <section id="jobRecord" class="job-record" hidden>
+        <div class="record-head">
+          <span class="record-title">岗位记录</span>
+          <span id="recordSeen" class="record-seen"></span>
+        </div>
+        <p id="recordCompany" class="record-company"></p>
+        <div id="statusRow" class="status-row"></div>
+      </section>
+
+      <section id="resultSection" class="result" hidden>
+        <label id="resultLabel">生成结果</label>
+        <div id="resultText" class="result-box"></div>
+        <div class="result-actions">
+          <button id="copyResult" class="secondary" type="button">一键复制</button>
+          <button id="regenResult" class="pill-button" type="button" title="用同样的信息重新生成一版">换一版</button>
+        </div>
+      </section>
+
+      <p id="status" class="status" role="status"></p>
+
+      <section class="profile">
+        <h2 class="section-title">我的资料</h2>
+
+        <div class="field">
+          <label>我的简历</label>
+          <input id="resumeFile" type="file" accept=".txt,.md,.pdf,.docx,.doc" hidden />
+          <div class="upload-row">
+            <button id="resumeUploadBtn" class="secondary with-ico" type="button"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><path d="M12 3v13"/></svg><span>上传简历文件</span></button>
+            <span id="resumeEmpty" class="file-name">未上传</span>
+            <span id="resumeChip" class="file-chip" hidden><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span id="resumeFileName" class="chip-name"></span></span>
+            <button id="resumeClear" class="pill-button danger" type="button" title="清除简历" hidden><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4.5A1.5 1.5 0 0 1 9.5 3h5A1.5 1.5 0 0 1 16 4.5V6m3 0v13.5A1.5 1.5 0 0 1 17.5 21h-11A1.5 1.5 0 0 1 5 19.5V6"/></svg><span>清除</span></button>
+          </div>
+          <p id="resumeHint" class="hint">支持 .txt / .md / .pdf / .docx</p>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="currentSalary">目前薪资</label>
+            <input id="currentSalary" type="text" placeholder="如 15k" />
+          </div>
+          <div class="field">
+            <label for="expectedSalary">期望薪资区间</label>
+            <input id="expectedSalary" type="text" placeholder="如 20k-25k" />
+          </div>
+        </div>
+
+        <p id="profileStatus" class="status"></p>
+      </section>
+
+      <footer>
+        <p>资料只存在本机 · 插件无服务器，不上传任何数据</p>
+        <p class="author">作者 <strong>NicoShao</strong> · <button id="openDisclaimer" class="link-button" type="button">免责声明</button></p>
+      </footer>
+    </main>
+
+
+    <div id="jobModal" class="modal job-modal" hidden>
+      <div class="modal-backdrop" data-close="1"></div>
+      <div class="modal-card modal-card-sm" role="dialog" aria-modal="true" aria-labelledby="jobModalTitle">
+        <div class="modal-body">
+          <h2 id="jobModalTitle" class="prompt-title">检测到切换职位页面</h2>
+          <p class="prompt-text">要读取这一页的 JD 吗？</p>
+        </div>
+        <div class="modal-foot">
+          <button id="jobDismiss" class="secondary" type="button">暂不</button>
+          <button id="jobConfirm" class="primary" type="button">读取 JD</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="settingsModal" class="modal" hidden>
+      <div class="modal-backdrop" data-close="1"></div>
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+        <div class="modal-head">
+          <h2 id="settingsTitle">模型设置</h2>
+          <button id="settingsClose" class="icon-button" type="button" title="关闭"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="field-row">
+            <div class="field">
+              <label for="apiModel">模型名称</label>
+              <input id="apiModel" type="text" placeholder="如 deepseek-chat" />
+            </div>
+            <div class="field">
+              <label for="apiKey">API Key</label>
+              <input id="apiKey" type="password" placeholder="sk-…" />
+            </div>
+          </div>
+          <p class="hint">
+            本插件使用 DeepSeek，费用直接结算给 DeepSeek，生成一条通常不到一分钱。
+            还没有 Key 的话，去 <a href="https://platform.deepseek.com/api_keys" target="_blank" rel="noreferrer">DeepSeek 开放平台</a> 注册后创建一个，复制粘贴到上面即可。
+          </p>
+
+          <div class="field">
+            <label for="searchKey">搜索 API Key（背调用）</label>
+            <input id="searchKey" type="password" placeholder="sk-…" />
+            <p class="hint">
+              背调要靠它去公开网页检索。用博查，去 <a href="https://open.bochaai.com/" target="_blank" rel="noreferrer">博查 AI 开放平台</a> 注册拿 Key，按次计费、注册后有免费额度。
+              不填也能用插件，只是背调会退回「手动查」那条路。
+            </p>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="field">
+            <div class="field-label-row">
+              <label for="styleSamples">我的说话风格</label>
+              <span class="field-tag">可选，但最有效</span>
+            </div>
+            <div class="input-shell"><textarea id="styleSamples" class="prompt-textarea" placeholder="粘贴 2-3 条你自己平时发给同事或朋友的消息…" spellcheck="false"></textarea></div>
+            <p class="hint">填了之后，打招呼语会模仿你自己的语气。这是去掉 AI 味最有效的一招——给模型一个具体的模仿对象，比告诉它「写得自然一点」管用得多。</p>
+          </div>
+
+          <div class="field">
+            <label class="checkbox-row" for="humanizeEnabled">
+              <input id="humanizeEnabled" type="checkbox" />
+              <span>生成后自动口语化润色一遍</span>
+            </label>
+            <p class="hint">拿第一稿当靶子改，比一次写好容易得多。代价是多一次模型调用，一条多几厘钱。</p>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="field">
+            <div class="field-label-row">
+              <label for="greetingPrompt">打招呼语生成提示词</label>
+              <button id="resetGreetingPrompt" class="pill-button" type="button">恢复默认</button>
+            </div>
+            <div class="input-shell"><textarea id="greetingPrompt" class="prompt-textarea" spellcheck="false"></textarea></div>
+          </div>
+        </div>
+
+        <div class="modal-foot">
+          <p id="settingsStatus" class="status"></p>
+          <button id="saveSettings" class="primary" type="button">保存设置</button>
+        </div>
+      </div>
+    </div>
+    <div id="backcheckModal" class="modal" hidden>
+      <div class="modal-backdrop" data-close="1"></div>
+      <div class="modal-card modal-card-wide" role="dialog" aria-modal="true" aria-labelledby="backcheckTitle">
+        <div class="modal-head">
+          <h2 id="backcheckTitle">背调该公司</h2>
+          <button id="backcheckClose" class="icon-button" type="button" title="关闭"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+        </div>
+        <div class="modal-body">
+          <p class="lead">插件会按六个维度到公开网页检索这家公司，再把结果整理成报告，<strong>每条结论都标出来源编号</strong>。检索走的是搜索服务的开放接口，不是爬虫；报告里每一条你都能点回原文核对。</p>
+
+          <div class="field">
+            <label for="backcheckCompany">公司全称</label>
+            <input id="backcheckCompany" type="text" placeholder="工商全称，越准确检索越准" />
+            <p class="hint">公司名是从职位页自动读的，可能只是简称。改成工商全称能明显提高命中率，改完会记下来，下次直接用它。</p>
+          </div>
+
+          <details id="manualBlock" class="extra-block">
+            <summary>没配搜索 Key？点这里手动查（含 8 个官方入口与判断标准）</summary>
+            <div id="sourceList" class="source-list"></div>
+            <button id="copyChecklist" class="pill-button accent" type="button">复制作业单</button>
+          </details>
+
+          <details class="extra-block">
+            <summary>补充材料（可选）</summary>
+            <p class="step-desc">检索没覆盖到、但你手上有的信息（内部消息、朋友转述等）贴在这里，会一起纳入分析并单独标注为使用者自述。</p>
+            <div class="input-shell"><textarea id="backcheckMaterials" placeholder="可选，粘贴补充材料…"></textarea></div>
+          </details>
+
+          <p id="backcheckStatus" class="status" role="status"></p>
+          <p id="searchProgress" class="search-progress" hidden></p>
+
+          <section id="backcheckResult" class="result" hidden>
+            <label>背调报告</label>
+            <div id="backcheckText" class="result-box"></div>
+            <div class="result-actions">
+              <button id="copyBackcheck" class="secondary" type="button">一键复制</button>
+              <button id="toggleSources" class="pill-button" type="button">来源清单</button>
+            </div>
+            <div id="sourceRefs" class="source-refs" hidden></div>
+          </section>
+        </div>
+        <div class="modal-foot">
+          <button id="runBackcheck" class="primary" type="button">开始背调</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="disclaimerModal" class="modal" hidden>
+      <div class="modal-backdrop" data-close="1"></div>
+      <div class="modal-card modal-card-wide" role="dialog" aria-modal="true" aria-labelledby="disclaimerTitle">
+        <div class="modal-head">
+          <h2 id="disclaimerTitle">免责声明</h2>
+          <button id="disclaimerClose" class="icon-button" type="button" title="关闭"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+        </div>
+        <div class="modal-body">
+          <div id="disclaimerText" class="legal-text"></div>
+        </div>
+        <div class="modal-foot">
+          <button id="disclaimerOk" class="primary" type="button">我已阅读</button>
+        </div>
+      </div>
+    </div>
+    <script src="vendor/jszip/jszip.min.js"></script>
+    <script type="module" src="sidepanel.js"></script>
+  </body>
+</html>
